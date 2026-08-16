@@ -1,12 +1,11 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Menu, Search, ShoppingCart } from "lucide-react";
+import { Heart, Menu, Search, ShoppingCart, UserRound } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/auth/session";
 
-export function Header() {
+export async function Header() {
+  const user = await getCurrentUser();
   return (
     <header className="border-b border-slate-100 bg-white/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -78,13 +77,13 @@ export function Header() {
 
         {/* Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
+          <Link
+            href="/recherche"
             aria-label="Rechercher"
             className="hidden rounded-full p-2 text-slate-700 transition hover:bg-slate-100 sm:inline-flex"
           >
             <Search className="h-5 w-5" />
-          </button>
+          </Link>
 
           <button
             type="button"
@@ -93,9 +92,6 @@ export function Header() {
           >
             <Heart className="h-5 w-5" />
 
-            <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-emerald-700 px-1 text-[10px] font-semibold text-white">
-              2
-            </span>
           </button>
 
           <button
@@ -105,14 +101,11 @@ export function Header() {
           >
             <ShoppingCart className="h-5 w-5" />
 
-            <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-emerald-700 px-1 text-[10px] font-semibold text-white">
-              3
-            </span>
           </button>
 
-          <Button className="hidden bg-emerald-700 px-5 hover:bg-emerald-800 lg:inline-flex">
-            Se connecter
-          </Button>
+          <Link className="hidden h-9 items-center gap-1.5 rounded-lg bg-emerald-700 px-5 text-sm font-medium text-white hover:bg-emerald-800 lg:inline-flex" href={user ? "/compte" : "/connexion"}>
+            {user ? <><UserRound className="h-4 w-4" /> {user.firstName}</> : "Se connecter"}
+          </Link>
 
           <button
             type="button"

@@ -1,45 +1,7 @@
 import { ProductCard } from "@/components/product/product-card";
+import type { ProductSummary } from "@/lib/api/types";
 
-const products = [
-  {
-    name: "CeraVe",
-    subtitle: "Nettoyant visage",
-    price: 120000,
-    image: "/products/cerave.jpeg",
-  },
-  {
-    name: "Nivea",
-    subtitle: "Lait hydratant",
-    price: 80000,
-    image: "/products/nivea.jpeg",
-  },
-  {
-    name: "Garnier",
-    subtitle: "Gel nettoyant",
-    price: 75000,
-    image: "/products/garnier.jpeg",
-  },
-  {
-    name: "Vaseline",
-    subtitle: "Crème cacao",
-    price: 60000,
-    image: "/products/vaseline.jpeg",
-  },
-  {
-    name: "Eucerin",
-    subtitle: "Crème hydratante",
-    price: 150000,
-    image: "/products/eucerin.jpeg",
-  },
-  {
-    name: "Dove",
-    subtitle: "Pain de beauté",
-    price: 45000,
-    image: "/products/dove.jpeg",
-  },
-];
-
-export function PopularProductsSection() {
+export function PopularProductsSection({ products }: { products: ProductSummary[] }) {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6">
       <div className="mb-6 flex items-center justify-between">
@@ -47,19 +9,21 @@ export function PopularProductsSection() {
           Produits populaires
         </h2>
 
-        <button className="text-sm font-medium text-emerald-700 transition hover:text-emerald-800">
+        <a href="/boutique" className="text-sm font-medium text-emerald-700 transition hover:text-emerald-800">
           Voir tout
-        </button>
+        </a>
       </div>
 
       <div className="flex gap-4 overflow-x-auto pb-4">
         {products.map((product) => (
           <ProductCard
-            key={product.name}
+            key={product.id}
             name={product.name}
-            subtitle={product.subtitle}
-            price={product.price}
-            image={product.image}
+            slug={product.slug}
+            subtitle={product.brand ?? product.category.name}
+            price={product.priceGnf}
+            image={product.primaryImage?.url ?? "/file.svg"}
+            available={product.available}
           />
         ))}
       </div>
