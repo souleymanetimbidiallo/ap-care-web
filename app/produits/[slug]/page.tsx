@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, Minus, Plus, ShoppingCart, ShieldCheck } from "lucide-react";
+import { Heart, ShieldCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { MobileBottomNav } from "@/components/layout/mobile-bottom-nav";
 import { TopBar } from "@/components/layout/top-bar";
 import { ApiNotFoundError, getProduct } from "@/lib/api/catalog";
 import type { ProductDetail } from "@/lib/api/types";
+import { AddToCartForm } from "@/components/cart/add-to-cart-form";
 
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
@@ -36,11 +37,8 @@ export default async function ProductPage({ params }: Props) {
         <p className="mt-5 text-2xl font-bold text-emerald-700">{product.priceGnf.toLocaleString("fr-FR")} GNF</p>
         <p className={`mt-3 text-sm font-semibold ${product.available ? "text-emerald-700" : "text-rose-600"}`}>{product.available ? `${product.stockQuantity} en stock` : "Produit indisponible"}</p>
         <p className="mt-6 leading-7 text-slate-600">{product.description}</p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <div className="inline-flex h-12 items-center rounded-lg border border-slate-200"><button aria-label="Réduire la quantité" className="p-3"><Minus className="h-4 w-4" /></button><span className="px-3">1</span><button aria-label="Augmenter la quantité" className="p-3"><Plus className="h-4 w-4" /></button></div>
-          <button disabled={!product.available} className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-emerald-700 px-6 font-medium text-white hover:bg-emerald-800 disabled:cursor-not-allowed disabled:bg-slate-300"><ShoppingCart className="h-5 w-5" />Ajouter au panier</button>
-          <button aria-label="Ajouter aux favoris" className="h-12 rounded-lg border border-slate-200 p-3 text-slate-600"><Heart className="h-5 w-5" /></button>
-        </div>
+        <AddToCartForm productSlug={product.slug} stockQuantity={product.stockQuantity} available={product.available} />
+        <button aria-label="Ajouter aux favoris" className="mt-3 h-12 w-12 rounded-lg border border-slate-200 p-3 text-slate-600"><Heart className="h-5 w-5" /></button>
         <div className="mt-8 flex items-center gap-3 rounded-xl bg-emerald-50 p-4 text-sm text-emerald-900"><ShieldCheck className="h-5 w-5" />Produit sélectionné et authentique</div>
       </div>
     </div>

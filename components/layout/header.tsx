@@ -3,9 +3,10 @@ import Link from "next/link";
 import { Heart, Menu, Search, ShoppingCart, UserRound } from "lucide-react";
 
 import { getCurrentUser } from "@/lib/auth/session";
+import { getCart } from "@/lib/cart/api";
 
 export async function Header() {
-  const user = await getCurrentUser();
+  const [user, cart] = await Promise.all([getCurrentUser(), getCart().catch(() => ({ itemCount: 0 }))]);
   return (
     <header className="border-b border-slate-100 bg-white/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -94,14 +95,14 @@ export async function Header() {
 
           </button>
 
-          <button
-            type="button"
+          <Link
+            href="/panier"
             aria-label="Panier"
             className="relative rounded-full p-2 text-slate-700 transition hover:bg-slate-100"
           >
             <ShoppingCart className="h-5 w-5" />
-
-          </button>
+            {cart.itemCount > 0 && <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1 text-[10px] font-bold text-white">{cart.itemCount}</span>}
+          </Link>
 
           <Link className="hidden h-9 items-center gap-1.5 rounded-lg bg-emerald-700 px-5 text-sm font-medium text-white hover:bg-emerald-800 lg:inline-flex" href={user ? "/compte" : "/connexion"}>
             {user ? <><UserRound className="h-4 w-4" /> {user.firstName}</> : "Se connecter"}
